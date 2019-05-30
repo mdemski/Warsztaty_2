@@ -1,4 +1,4 @@
-package zadanie_1;
+package zadanie_1.group;
 
 public class Group {
     private int id;
@@ -8,8 +8,12 @@ public class Group {
 
     }
 
-    public Group(String name) {
+    public Group(int id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Group(String name) {
         this.name = name;
     }
 
