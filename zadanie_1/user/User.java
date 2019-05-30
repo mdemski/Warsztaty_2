@@ -1,6 +1,7 @@
-package zadanie_1;
+package zadanie_1.user;
 
 import org.mindrot.jbcrypt.BCrypt;
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class User {
             }
             return users;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można znaleść użytkowników.");
         }
         return null;
     }
