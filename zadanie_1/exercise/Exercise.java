@@ -1,4 +1,6 @@
-package zadanie_1;
+package zadanie_1.exercise;
+
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,13 +14,19 @@ public class Exercise {
     private String title;
     private String description;
 
-    Exercise(String title, String description) {
+    public Exercise(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    Exercise() {
+    public Exercise() {
 
+    }
+
+    public Exercise(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 
     public int getId() {
@@ -62,7 +70,7 @@ public class Exercise {
             }
             return exercises;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie znaleziono zadań bez rozwiązań");;
         }
         return null;
     }
