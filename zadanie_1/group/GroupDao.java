@@ -1,6 +1,10 @@
-package zadanie_1;
+package zadanie_1.group;
+
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupDao {
 
@@ -28,7 +32,7 @@ public class GroupDao {
             }
             return group;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można utworzyć grupy.");
             return null;
         }
     }
@@ -45,7 +49,7 @@ public class GroupDao {
                 return group;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można odczytać grupy o id: " + grId);
         }
         return null;
     }
@@ -57,7 +61,7 @@ public class GroupDao {
             statement.setInt(2, group.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można uaktualnić grupy o id: " + group.getId());
         }
     }
 
@@ -67,24 +71,26 @@ public class GroupDao {
             statement.setInt(1, grId);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można usunąć grupy o id: " + grId);
         }
     }
 
-    public void allGroups() {
+    public List<Group> allGroups() {
         try (Connection conn = ConnectionGen.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_GROUPS_QUERY);
             ResultSet resultSet = statement.executeQuery();
+            List<Group> groups = new ArrayList<>();
             while (resultSet.next()) {
-                User user = new User();
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                System.out.printf("Id: %d, Title: %s", id, name);
-                System.out.println();
+                Group group = new Group(id, name);
+                groups.add(group);
             }
+            return groups;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie odnaleziono grup.");
         }
+        return null;
     }
 
 }
