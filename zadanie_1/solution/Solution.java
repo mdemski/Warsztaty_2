@@ -1,4 +1,6 @@
-package zadanie_1;
+package zadanie_1.solution;
+
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.*;
 import java.util.*;
@@ -14,7 +16,7 @@ public class Solution {
     private double rating;
 
 
-    Solution() {
+    public Solution() {
 
     }
 
@@ -44,6 +46,16 @@ public class Solution {
     }
 
     public Solution(double rating) {
+        this.rating = rating;
+    }
+
+    public Solution(int id, String created, String updated, String description, int exercise_id, int user_id, double rating) {
+        this.id = id;
+        this.created = created;
+        this.updated = updated;
+        this.description = description;
+        this.exercise_id = exercise_id;
+        this.user_id = user_id;
         this.rating = rating;
     }
 
@@ -128,7 +140,7 @@ public class Solution {
                 return solutionList;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można znaleść rozwiązań.");
         }
         return null;
     }
@@ -150,7 +162,7 @@ public class Solution {
             }
             return solutions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można znaleść rozwiązań.");
         }
         return null;
     }
@@ -166,7 +178,7 @@ public class Solution {
                 System.out.println("Średnia ocena rozwiązań użytkownika o ID: " + userId + " równa się: " + averageByUser);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można znaleść rozwiązań.");
         }
     }
 
@@ -181,7 +193,7 @@ public class Solution {
                 System.out.println("Średnia ocena rozwiązań dla zadania z ID: " + exerciseId + " równa się: " + averageByExercise);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można znaleść rozwiązań.");
         }
     }
 
