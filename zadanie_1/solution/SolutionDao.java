@@ -1,6 +1,10 @@
-package zadanie_1;
+package zadanie_1.solution;
+
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SolutionDao {
     private static final String CREATE_SOLUTION_QUERY =
@@ -29,7 +33,7 @@ public class SolutionDao {
             }
             return solution;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można utworzyć rozwiązania.");
             return null;
         }
     }
@@ -51,7 +55,7 @@ public class SolutionDao {
                 return solution;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można odczytać rozwiązania o id: " + solId);
         }
         return null;
     }
@@ -66,7 +70,7 @@ public class SolutionDao {
             statement.setDouble(5,solution.getRating());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można uaktualnić rozwiązania o id: " + solution.getId());
         }
     }
 
@@ -76,16 +80,16 @@ public class SolutionDao {
             statement.setInt(1, solId);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można usunąć rozwiązania o id: " + solId);
         }
     }
 
-    public void allSolutions() {
+    public List<Solution> allSolutions() {
         try (Connection conn = ConnectionGen.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_SOLUTIONS_QUERY);
             ResultSet resultSet = statement.executeQuery();
+            List<Solution> solutions = new ArrayList<>();
             while (resultSet.next()) {
-                User user = new User();
                 int id = resultSet.getInt("id");
                 String created = resultSet.getString("created");
                 String updated = resultSet.getString("updated");
@@ -93,11 +97,13 @@ public class SolutionDao {
                 int exerciseId = resultSet.getInt("exercise_id");
                 int usersId = resultSet.getInt("users_id");
                 double rating = resultSet.getDouble("rating");
-                System.out.printf("Id: %d, created: %s, updated: %s, description: %s, Exercise id: %d, User id: %d, rating: %d", id, created, updated, description, exerciseId, usersId, rating);
-                System.out.println();
+                Solution solution = new Solution(id, created, updated, description, exerciseId, usersId, rating);
+                solutions.add(solution);
             }
+            return solutions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie odnaleziono rozwiązań.");
         }
+        return null;
     }
 }
