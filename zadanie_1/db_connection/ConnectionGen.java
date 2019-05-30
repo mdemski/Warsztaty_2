@@ -1,4 +1,4 @@
-package zadanie_1;
+package zadanie_1.db_connection;
 
 
 import java.sql.Connection;
