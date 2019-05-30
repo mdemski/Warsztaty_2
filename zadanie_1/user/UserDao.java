@@ -1,5 +1,6 @@
-package zadanie_1;
+package zadanie_1.user;
 
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class UserDao {
             }
             return user;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można utworzyć użytkownika.");
             return null;
         }
     }
@@ -50,7 +51,7 @@ public class UserDao {
                 return user;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można odczytać użytkownika o id: " + userId);
         }
         return null;
     }
@@ -64,7 +65,7 @@ public class UserDao {
             statement.setInt(4, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można uaktualnić użytkownika o id: " + user.getId());
         }
     }
 
@@ -74,26 +75,31 @@ public class UserDao {
             statement.setInt(1, userId);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można usunąć użytkownika o id: " + userId);
         }
     }
 
-    public void allUsers() {
+    public List<User> allUsers() {
         try (Connection conn = ConnectionGen.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_USERS_QUERY);
             ResultSet resultSet = statement.executeQuery();
+            List<User> users = new ArrayList<>();
             while (resultSet.next()) {
                 User user = new User();
                 int id = resultSet.getInt("id");
                 String userName = resultSet.getString("username");
                 String email = resultSet.getString("email");
                 user.setPassword(resultSet.getString("password"));
-                System.out.printf("Id: %d, Username: %s, email: %s", id, userName, email);
-                System.out.println();
+                user.setId(id);
+                user.setUserName(userName);
+                user.setEmail(email);
+                users.add(user);
             }
+            return users;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie odnaleziono użytkoników.");
         }
+        return null;
     }
 
 
