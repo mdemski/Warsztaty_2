@@ -1,6 +1,10 @@
-package zadanie_1;
+package zadanie_1.exercise;
+
+import zadanie_1.db_connection.ConnectionGen;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExerciseDao {
     private static final String CREATE_EXERCISE_QUERY =
@@ -27,7 +31,7 @@ public class ExerciseDao {
             }
             return exercise;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można utworzyć zadania.");
             return null;
         }
     }
@@ -45,7 +49,7 @@ public class ExerciseDao {
                 return exercise;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można odczytać zadania o id: " + exerId);
         }
         return null;
     }
@@ -58,7 +62,7 @@ public class ExerciseDao {
             statement.setInt(3, exercise.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można uaktualnić zadania o id: " + exercise.getId());
         }
     }
 
@@ -68,25 +72,27 @@ public class ExerciseDao {
             statement.setInt(1, exerId);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie można usunąć zadania o id: " + exerId);
         }
     }
 
-    public void allExercises() {
+    public List<Exercise> allExercises() {
         try (Connection conn = ConnectionGen.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(FIND_ALL_EXERCISE_QUERY);
             ResultSet resultSet = statement.executeQuery();
+            List<Exercise> exerciseList = new ArrayList<>();
             while (resultSet.next()) {
-                User user = new User();
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
-                System.out.printf("Id: %d, Title: %s, Description: %s", id, title, description);
-                System.out.println();
+                Exercise exercise = new Exercise(id, title, description);
+                exerciseList.add(exercise);
             }
+            return exerciseList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Nie odnaleziono zadań.");
         }
+        return null;
     }
 
 }
