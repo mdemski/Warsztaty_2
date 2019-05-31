@@ -137,8 +137,8 @@ public class Solution {
                 int userIdS = resultSet.getInt("users_id");
                 Solution solution = new Solution(id, description, userIdS);
                 solutionList.add(solution);
-                return solutionList;
             }
+            return solutionList;
         } catch (SQLException e) {
             System.out.println("Nie można znaleść rozwiązań.");
         }
